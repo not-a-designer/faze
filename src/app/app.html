@@ -1,0 +1,6 @@
+<div *ngIf="showSplash" class="splash">
+    <ion-spinner showWhen="android" name="dots"></ion-spinner>
+    <ion-spinner showWhen="ios, windows" name="ios"></ion-spinner>
+</div>
+
+<ion-nav [root]="rootPage" swipeBackEnabled="false"></ion-nav>

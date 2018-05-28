@@ -1,0 +1,102 @@
+// http://ionicframework.com/docs/theming/
+
+
+// App Global Sass
+// --------------------------------------------------
+// Put style rules here that you want to apply globally. These
+// styles are for the entire app and not just one component.
+// Additionally, this file can be also used as an entry point
+// to import other Sass files to be included in the output CSS.
+//
+// Shared Sass variables, which can be used to adjust Ionic's
+// default Sass variables, belong in "theme/variables.scss".
+//
+// To declare rules for a specific mode, create a child rule
+// for the .md, .ios, or .wp mode classes. The mode class is
+// automatically applied to the <body> element in the app.
+
+
+///////////////////
+// GLOBAL STYLES //
+///////////////////
+html, body, ion-app, .ion-content, .nav-decor {
+    background-color: transparent !important;
+}
+
+.splash {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: color($colors, faze, base) !important;
+}
+
+input.ng-invalid.ng-touched {
+    border: color($colors, danger);
+    ::placeholder {
+        color: color($colors, danger);
+    }
+}
+
+
+.settings-modal {
+    position: absolute;
+    ion-content { overflow-y: auto !important; }
+    ion-list-header {
+        background: color($colors, faze, base) !important;
+    }
+    ion-footer {
+        position: fixed !important;
+        bottom: 0 !important;
+    }
+}
+
+
+
+
+
+//////////////////////////
+// iOS SPECIFIC STYLING //
+//////////////////////////
+.ios {
+    .settings-modal  {
+        top: 51px !important;
+        max-height: calc(100vh - 51px) !important;
+        
+    }
+}
+
+
+
+//////////////////////////////
+// ANDROID SPECIFIC STYLING //
+//////////////////////////////
+.md {
+    .settings-modal {
+        top: $toolbar-md-height !important;//56px;
+        max-height: calc(100vh - 56px) !important;
+
+    }
+    
+    input.ng-invalid.ng-touched {
+        border: 0px !important;
+        border-bottom: 1px solid color($colors, danger) !important;
+    }
+}
+
+
+
+
+
+//////////////////////////////
+// WINDOWS SPECIFIC STYLING //
+//////////////////////////////
+.wp {
+    .settings-modal {
+        top: $toolbar-wp-height !important;
+        max-height: calc(100% - 46px) !important;
+    }
+}

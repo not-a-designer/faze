@@ -1,0 +1,59 @@
+<ion-content [@fadeOut]>
+    <ion-avatar id="logo">
+      <img src="assets/imgs/logo.png">
+    </ion-avatar>
+  
+  <ion-card id="auth-card" no-padding>
+    <ion-card-title padding-top text-center>
+      <ion-label color="i-faze">Let's get started!</ion-label>
+    </ion-card-title>
+    <ion-card-content no-padding padding-left padding-right padding-bottom>
+      <sign-in [@fadeIn] (authStatus)="login($event)" *ngIf="authMethod === 'login'"></sign-in>
+
+      <sign-up [@fadeIn] (authStatus)="register($event)" *ngIf="authMethod === 'register'"></sign-up>
+      <button 
+        ion-item
+        detail-none
+        padding-top
+        id="login-method" 
+        text-center 
+        clear 
+        
+        (click)="toggleAuthMethod()">
+    
+        <ion-label [@fadeIn]>
+          <ion-icon class="arrows" 
+            name="arrow-dropleft"
+            *ngIf="authMethod === 'register'">&nbsp;
+          </ion-icon>
+          {{ (authMethod === 'login') ? 'Create an account' : 'Login' }}
+          &nbsp;<ion-icon class="arrows" 
+            name="arrow-dropright"
+            *ngIf="authMethod === 'login'">
+          </ion-icon>
+        </ion-label>    
+      </button>
+      <ion-list id="social-media" *ngIf="authMethod === 'login'">
+          <button ion-fab mini color="transparent" (click)="igLogin()">
+            <ion-icon color="i-faze" name="logo-instagram"></ion-icon>
+          </button>
+          <button ion-fab mini color="transparent" (click)="fbLogin()">
+            <ion-icon color="i-faze" name="logo-facebook"></ion-icon>
+          </button>
+          <button ion-fab mini color="transparent" (click)="twitterLogin()">
+            <ion-icon color="i-faze" name="logo-twitter"></ion-icon>
+          </button>
+          <button ion-fab mini color="transparent" (click)="googleLogin()">
+            <ion-icon color="i-faze" name="logo-google"></ion-icon>
+          </button>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  
+  
+</ion-content>
+<ion-footer no-shadow no-border>
+  <ion-tooolbar text-center transparent>
+    <ion-label id="copy-right" color="light">Faze | 2018&copy;</ion-label>
+  </ion-tooolbar>
+</ion-footer>

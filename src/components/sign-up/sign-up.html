@@ -1,0 +1,62 @@
+<ng-container>
+  <ion-item no-lines>
+    <ion-label showWhen="android" color="i-faze" floating>Email</ion-label>
+    <ion-input 
+      #emailField
+      type="email"
+      required
+      autocomplete
+      email
+      [placeholder]="!isMd ? 'Email' : ''"
+      [(ngModel)]="email">
+    </ion-input>
+  </ion-item>
+
+  <ion-item no-lines>
+    <ion-label showWhen="android" color="i-faze" floating>Password</ion-label>
+    <ion-input 
+      #passwordField
+      type="password"
+      required
+      [placeholder]="!isMd ? 'Password' : ''"
+      [(ngModel)]="password">
+    </ion-input>
+  </ion-item>
+
+  <ion-item no-lines>
+    <ion-label showWhen="android" color="i-faze" floating>Confirm password</ion-label>
+    <ion-input 
+      #confirmField
+      type="password"
+      required
+      [placeholder]="!isMd ? 'Confirm password' : ''"
+      [(ngModel)]="confirm">
+    </ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-datetime 
+      #dob
+      pickerFormat="MM DD YYYY"
+      displayFormat="MMM DD YYYY"
+      [max]="maxDate"
+      [placeholder]="!isMd ? 'Date of birth' : ''"
+      [(ngModel)]="birthdate">
+    </ion-datetime>
+  </ion-item>
+
+  
+  <button
+    id="register"
+    ion-button
+    icon-only
+    item-right
+    no-padding
+    clear
+    *ngIf="emailField.value && passwordField.value.length > 6"
+    color="i-faze"
+    [disabled]="passwordField.value !== confirmField.value"
+    (click)="register()">
+    <ion-icon color="i-faze" large name="person-add"></ion-icon>
+  </button>
+</ng-container>

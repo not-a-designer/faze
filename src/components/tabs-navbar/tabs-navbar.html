@@ -1,0 +1,79 @@
+<ion-navbar color="i-faze">
+
+  <ion-buttons left>
+    <button ion-button icon-only round (click)="home()">
+      <img id="logo" src="assets/imgs/logo.png">
+    </button>
+  </ion-buttons>
+
+  <ion-title>{{ title }}</ion-title>
+
+  <ion-buttons right>
+    <!--  PROFILE DETAILS CONTROLS  -->
+    <ng-container *ngIf="activeTab === 0 && settingsEnabled">
+      <button [@fadeIn] ion-button icon-only (click)="camera()">
+        <ion-icon name="camera"></ion-icon>
+      </button>
+
+      <button [@fadeIn] ion-button icon-only [disabled]="!shareEnabled" (click)="share()">
+        <ion-icon name="share"></ion-icon>
+      </button>
+    </ng-container>
+
+    <!--  PROFILE SELECTION CONTROLS  -->
+    <ng-container *ngIf="activeTab === 1">
+      <button 
+        [@fadeIn] 
+        *ngIf="profileOptions && settingsEnabled" 
+        ion-button 
+        icon-only 
+        (click)="details()">
+        <ion-icon name="create"></ion-icon>
+      </button>
+
+      <button 
+        [@fadeIn] 
+        *ngIf="profileOptions && settingsEnabled" 
+        ion-button 
+        icon-only 
+        (click)="camera()">
+        <ion-icon name="camera"></ion-icon>
+      </button>
+    </ng-container>
+
+    <button 
+      [@fadeIn] 
+      ion-button 
+      icon-only 
+      *ngIf="profileOptions && settingsEnabled"
+      (click)="delete()">
+      <ion-icon name="trash"></ion-icon>
+    </button>
+
+    <button 
+      [@fadeIn] 
+      *ngIf="!profileOptions && settingsEnabled" 
+      ion-button 
+      icon-only 
+      (click)="newProfile()">
+      <ion-icon name="add"></ion-icon>
+    </button>
+
+    <button 
+      [@fadeIn]
+      *ngIf="!settingsEnabled"
+      ion-button 
+      icon-only
+      (click)="logout()">
+        <ion-icon name="log-out"></ion-icon>
+      </button>
+
+    <button 
+      [@fadeIn]  
+      ion-button 
+      icon-only 
+      (click)="settingsEnabled ? settings() : hide()">
+      <ion-icon [name]="settingsEnabled ? 'settings' : 'done-all'"></ion-icon>
+    </button>
+  </ion-buttons>
+</ion-navbar>

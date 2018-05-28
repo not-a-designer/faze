@@ -1,0 +1,157 @@
+// Ionic Variables and Theming. For more info, please see:
+// http://ionicframework.com/docs/theming/
+
+// Font path is used to include ionicons,
+// roboto, and noto sans fonts
+$font-path: "../assets/fonts";
+
+
+// The app direction is used to include
+// rtl styles in your app. For more info, please see:
+// http://ionicframework.com/docs/theming/rtl-support/
+$app-direction: ltr;
+
+
+@import "ionic.globals";
+
+
+// Shared Variables
+// --------------------------------------------------
+// To customize the look and feel of this app, you can override
+// the Sass variables found in Ionic's source scss files.
+// 
+// Named Color Variables
+// --------------------------------------------------
+// Named colors makes it easy to reuse colors on various components.
+// It's highly recommended to change the default colors
+// to match your app's branding. Ionic uses a Sass map of
+// colors so you can add, rename and remove colors as needed.
+// The "primary" color is the only required color in the map.
+
+$colors: (
+  primary:         #3880ff,
+  secondary:       #0cd1e8,
+  tertiary:        #7044ff,
+  success:         #10dc60,
+  warning:         #ffce00,
+  danger:          #f04141,
+  light:           #f4f5f8,
+  medium:          #989aa2,
+  dark:            #222428,
+  transparent:     transparent,
+  toolbar-dark:    #cd7f32,
+
+  faze: (
+    base:          //#336666,
+                   //#3a106a,
+                  #fc0,
+    contrast:      //#ffff00
+                   //#d9e021
+                   #06f
+  ),
+  i-faze: (
+    base:          //#ffff00,
+                   //#d9e021
+                   #06f,
+    contrast:      //#336666
+                   //#3a106a,
+                   #fc0
+  )
+);
+
+
+
+$text-color: color($colors, faze, contrast);//#06f;//#336666;
+//$list-border-color:color($colors, faze, contrast);//#336666;
+$button-round-border-radius: 50%;
+
+
+
+// App iOS Variables
+// --------------------------------------------------
+// iOS only Sass variables can go here
+  $toolbar-ios-height: 64px;
+  $segment-button-ios-background-color: color($colors, faze, contrast);//#06f;
+  $segment-button-ios-background-color-activated: color($colors, faze, base);//#fc0;
+  $segment-button-ios-toolbar-button-height: 100%;
+  $segment-button-ios-toolbar-button-max-width: 100%;
+  $segment-button-ios-border-width: 0px;
+  $segment-button-ios-line-height: 5.75rem;
+  //$segment-button-ios-border-radius: 0;
+  $segment-button-ios-icon-size: 3rem;
+  $card-ios-padding-top: 5px;
+  $card-ios-header-padding-bottom: 2px;
+  $card-ios-padding-top: 5px;
+  $card-ios-padding-left: 0px ;
+  $alert-ios-background: color($colors, faze, base);//#fc0;
+  $alert-ios-button-border-color: color($colors, faze, contrast);//#06f;
+  $alert-ios-subtitle-text-color: color($colors, faze, contrast);//#06f;
+  $alert-ios-message-text-color: color($colors, faze, contrast);//#06f;
+  $list-ios-header-background-color: color($colors, faze, base);//#fc0;
+  $button-ios-small-icon-font-size: 2.3em;
+  
+  //$settings-modal-ios-height: calc(100vh - $toolbar-ios-height);
+// App Material Design Variables
+// --------------------------------------------------
+// Material Design only Sass variables can go here
+$segment-button-md-background-color: color($colors, faze, contrast);//#06f;
+$segment-button-md-background-color-activated: color($colors, faze, base);//#fc0;
+$segment-button-md-toolbar-button-height: 100%;
+$segment-button-md-toolbar-button-max-width: 100%;
+$card-md-padding-top: 5px;
+$card-md-header-padding-bottom: 2px;
+$card-md-padding-top: 5px;
+$card-md-padding-left: 0px ;
+$alert-md-background-color: color($colors, faze, base);//#fc0;
+$alert-md-button-border-color: color($colors, faze, contrast);//#06f;
+$alert-md-subtitle-text-color: color($colors, faze, contrast);//#06f;
+$alert-md-message-text-color: color($colors, faze, contrast);//#06f;
+$list-md-header-background-color: color($colors, faze, base);
+$fab-md-box-shadow: none;
+
+
+//$settings-modal-md-height: calc(100% - $toolbar-md-height);
+// App Windows Variables
+// --------------------------------------------------
+// Windows only Sass variables can go here
+$segment-button-wp-background-color: color($colors, faze, contrast);//#06f;
+$segment-button-wp-background-color-activated: color($colors, faze, base);//#fc0;
+$segment-button-wp-toolbar-button-height: 100%;
+$segment-button-wp-toolbar-button-width: 100%;
+$segment-button-wp-line-height: 5rem;
+$segment-button-wp-buttons-justify-content: space-between;
+$card-wp-padding-top: 5px;
+$card-wp-padding-left: 0px ;
+$card-wp-header-padding-bottom: 2px;
+$alert-wp-background: color($colors, faze, base);//#fc0;
+$alert-wp-button-border-color: color($colors, faze, contrast);//#06f;
+$alert-wp-subtitle-text-color: color($colors, faze, contrast);//#06f;
+$alert-wp-message-text-color: color($colors, faze, contrast);//#06f;
+$list-wp-header-background-color: color($colors, faze, base);
+//$list-wp-border-color: color($colors, faze, contrast);
+
+
+//$settings-modal-wp-height: calc(100vh - ($toolbar-wp-height * 2));
+// App Theme
+// --------------------------------------------------
+// Ionic apps can have different themes applied, which can
+// then be future customized. This import comes last
+// so that the above variables are used and Ionic's
+// default are overridden.
+
+@import "ionic.theme.default";
+
+
+// Ionicons
+// --------------------------------------------------
+// The premium icon font for Ionic. For more info, please see:
+// http://ionicframework.com/docs/ionicons/
+
+@import "ionic.ionicons";
+
+
+// Fonts
+// --------------------------------------------------
+
+@import "roboto";
+@import "noto-sans";

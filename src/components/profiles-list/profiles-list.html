@@ -1,0 +1,42 @@
+<ion-list no-padding *ngIf="profiles$ | async as profiles; else skeleton">
+    <ng-container *ngIf="profiles.length > 0; else noProfiles">
+        <button 
+            *ngFor="let profile of profiles"
+            ion-item 
+            detail-none 
+            no-lines
+            padding-horizontal
+            [color]="isActive(profile.id) ? 'faze' : null"
+            id="profile-item"
+            (click)="toggle(profile)"
+            (press)="delete(profile)">
+            <ion-avatar item-left *ngIf="profile.images">
+                <img src="profile.images[0]">
+            </ion-avatar>
+            <ion-icon item-left *ngIf="!profiles.images" color="danger" name="alert"></ion-icon>
+            <h2 ion-text>{{ profile.name }}</h2>
+            <h3 ion-text text-wrap>{{ profile?.desc }}</h3>
+        </button>    
+    </ng-container>
+    <ng-template #noProfiles>
+        <ion-item>
+            No saved Profiles
+        </ion-item>
+    </ng-template>
+</ion-list>
+
+<ng-template #skeleton>
+    <ion-list class="skeleton-list">
+        <button no-lines ion-item class="skeleton-button">
+            <ion-avatar class="skeleton-avatar" item-left>
+                <img class="skeleton-img">
+            </ion-avatar>
+            <h2 class="skeleton-h2"></h2>
+            <h3 class="skeleton-h3"></h3>
+        </button>
+    </ion-list>
+    
+</ng-template>
+
+
+

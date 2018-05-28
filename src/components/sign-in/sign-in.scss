@@ -1,0 +1,38 @@
+sign-in {
+    overflow-x: hidden;
+
+    ion-input {
+        border-bottom: .5px solid #06f !important;
+        //border-bottom-width: 100%;
+
+        
+    }
+
+    button {
+        color: #fff !important;
+        
+    }
+    #login {
+        position: absolute;
+        z-index: 9999999;
+    }
+}
+
+.ios sign-in {
+    #login {
+        top: 107px !important;
+        left: 198px;
+    }
+}
+.md sign-in {
+    #login {
+        top: 178px !important;
+        left: 203px;
+    }
+}
+.wp sign-in {
+    #login {
+        top: 138px !important;
+        left: 198px;
+    }
+}

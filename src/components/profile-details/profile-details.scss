@@ -1,0 +1,35 @@
+profile-details {
+
+    overflow-y: auto !important;
+    
+    .scroll-content {
+        margin-bottom: 0px !important;
+        padding-bottom: 0px !important;
+    }
+    
+    ion-fab {
+        padding: 0 !important;
+        margin: 0 !important;
+        
+        
+        button[ion-fab] {
+            background: #fff !important;
+            max-height: 30px !important;
+            max-width: 30px !important;
+        }
+        img {
+            height: 100% !important;
+            margin: 0 !important;
+        }
+        ion-card {
+            padding-left: 0 !important;
+        }
+        ion-card-content {
+            margin: 0 !important;
+        }
+        ion-card-header {
+            margin: 0 !important;
+        }
+    }
+
+}

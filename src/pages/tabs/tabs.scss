@@ -1,0 +1,75 @@
+page-tabs {
+
+    ion-page, 
+    ion-content { background-color: transparent !important; }  
+    
+    ion-header { background: color($colors, faze, base); }
+
+    ion-fab { margin-bottom: 15px; }
+    ion-fab[left] { margin-left: 10px; }
+    ion-fab[right] { margin-right: 10px; }
+
+    ion-footer { z-index: 99999999999; }
+
+    ion-slides { background-color: transparent !important; }
+    ion-slide { 
+        height: auto;
+        display: block !important;
+        align-items: unset !important;
+    }
+
+    .scroll-content {
+        margin-bottom: 0px !important;
+        padding-bottom: 0px !important;
+    }
+
+    #profiles-slide, 
+    #details-slide {
+        overflow-y: auto !important;
+        background-color: #fff !important;
+    }
+    
+    #camera-slide { background-color: transparent !important; }
+
+    #delete, #save, #next, #flash, #opacity {
+        box-shadow: none;
+        -webkit-box-shadow: none;
+    }
+
+    #opacity-slider {
+        min-width: 75vw; 
+        margin-left: -15px;
+    }
+
+    #camera-button { border: 2px solid color($colors, faze, base); }
+    #delete {
+        border: 6px solid color($colors, faze, contrast);
+        font-size: 5rem !important;
+    }
+    #camera-button, #delete { border-radius: 50%; }
+
+    /** PLATFORM SPECIFIC **/
+    .ios ion-modal {
+        $height: $toolbar-ios-height;
+        .modal-content {
+            position: absolute;
+            top: $height !important;
+        }
+    }
+    
+    .md ion-modal {
+        .modal-content {
+            position: absolute;
+            top: $toolbar-md-height !important;
+        }
+    }
+    
+    .wp ion-modal {
+        .modal-content {
+            position: absolute;
+            top: $toolbar-wp-height !important;
+        }
+    }    
+}
+
+

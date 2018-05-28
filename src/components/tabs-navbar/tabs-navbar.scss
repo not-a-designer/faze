@@ -1,0 +1,31 @@
+tabs-navbar {
+    background: color($colors, faze, base);
+    transition: 2s;
+}
+
+.ios tabs-navbar {
+    $height: 48px;
+    #logo {
+        max-height: $height - 5px;
+        
+        max-width: $height - 5px;
+    }
+}
+
+.md tabs-navbar {
+    $height: $toolbar-md-height;
+    #logo {
+        max-height: $height - 10px;
+        max-width: $height - 10px;
+    }
+}
+
+.wp tabs-navbar {
+    $height: $toolbar-wp-height;
+    #logo {
+        max-height: $height - 5px;
+        max-width: $height - 5px;
+        ;
+    }
+}
+

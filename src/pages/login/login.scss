@@ -1,0 +1,88 @@
+page-login {
+    transition: .225s .5s ease-out;
+
+    ion-content {
+        background-image: linear-gradient(to bottom, #fc0, #fc0 50%, #06f 50%, #06f);
+        background-size: cover;
+        background-repeat: no-repeat;
+        overflow: hidden;
+
+        .scroll-content {
+            overflow-y: hidden !important;
+        }
+        
+
+        #logo {
+            transition: .666s ease-in-out;
+            max-width: 20vw;
+            margin: 1.2vh auto 0 auto;
+
+        }
+
+        .logging-in {
+            transform: rotateY(360deg);
+            transition: transform 1s linear .2s;
+            transition-duration: infinite;
+        }
+
+        ion-card {
+            border-radius: 10px !important;
+            //border: 1px solid #06f !important;
+            height: auto !important;
+            left: 50%;
+            margin-left: auto !important;
+            margin-right: auto !important;
+            max-width: 80vw;
+            padding: 0px 20px !important;
+            //padding: 5px 20px 0 20px !important;
+            position:absolute;
+            transition: height .666s .5s ease-out;
+            transform: translate(-50%, -50%);
+            top:50%;
+            z-index: 99;
+        }
+        ion-card-content {
+            overflow-x: hidden;
+            margin: 0px 10px;
+        }
+        ion-card-content > ion-row {
+            margin: 0px!important;
+            //min-width: 100% !important;
+            display: inline-block;
+        }
+
+        #social-media {
+            display: flex !important;
+            list-style-type: none !important;
+            justify-content: space-evenly;
+            button {
+                border: .5px solid #fc0 !important;
+                min-height: 40px !important;
+                min-width: 40px !important;
+            }
+            
+        }
+
+        #login-method {
+            //color: #fff;
+            margin-left: auto;
+            margin-right: auto;
+            
+        }
+
+        #copy-right {
+            font-size: 6px !important;
+            display: inline-block !important;
+            vertical-align: middle !important;
+        }
+
+        #arrows {
+            display: inline-block !important;
+            vertical-align: middle !important;
+        }
+
+        ion-title#card-title {
+            color: #06f !important;
+        }
+    }
+}

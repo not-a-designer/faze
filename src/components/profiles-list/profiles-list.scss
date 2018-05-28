@@ -1,0 +1,43 @@
+profiles-list {
+
+    transition: .666s .5s ease-out;
+    
+    ion-list > button:last-of-type {
+        border-radius: 0 0 5px 5px !important;
+    }
+    ion-list > button:first-of-type {
+        border-radius: 5px 5px 0 0 !important;
+    }
+
+    ion-avatar {
+        border-radius: 50%;
+        border: 2px solid color($colors, faze, base);
+    }
+    ion-thumbnail > img {
+        border: 0px !important;
+    }
+
+    .skeleton-list {
+        
+    }
+    .skeleton-button {
+
+    }
+
+    .skeleton-avatar {
+        
+    }
+
+    .skeleton-img {
+        border-radius: 50%;
+        background-color: #ffcc00;
+    }
+
+    .skeleton-h2 {
+
+    }
+
+    .skeleton-h3 {
+
+    }
+}

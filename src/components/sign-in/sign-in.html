@@ -1,0 +1,56 @@
+<ng-container>
+  <ion-item no-lines>
+    <ion-label 
+      [color]="emailField.touched && emailField.invalid ? 'danger' : 'i-faze'"
+      showWhen="android"
+      floating>
+      Email
+    </ion-label>
+    <ion-input 
+      #emailField
+      type="email"
+      autocomplete
+      required
+      email
+      [placeholder]="!isMd ? 'Email' : ''"
+      [(ngModel)]="email">
+    </ion-input>
+  </ion-item> 
+  <ion-item text-wrap *ngIf="emailField.touched && !emailField.valid">
+    <ion-label color="danger">Please enter a valid email address</ion-label>
+  </ion-item>
+
+  <ion-item no-lines>
+    <ion-label 
+      [color]="passwordField.touched && !passwordField.valid ? 'danger' : 'i-faze'"
+      showWhen="android"
+      floating>
+      Password
+    </ion-label>
+    <ion-input 
+      #passwordField
+      type="password"
+      required
+      [placeholder]="!isMd ? 'Password' : ''"
+      [(ngModel)]="password">
+    </ion-input>
+  </ion-item> 
+  <ion-item hidden="true">
+      <ion-input></ion-input>
+  </ion-item>
+  <button
+    [@fade]
+    id="login"
+    ion-button
+    icon-only
+    item-right
+    no-padding
+    clear
+    *ngIf="emailField.value"
+    color="'i-faze" 
+    [disabled]="passwordField.value.length < 6"
+    (click)="login()">
+    <ion-icon color="i-faze" name="log-in"></ion-icon>
+  </button> 
+</ng-container>
+

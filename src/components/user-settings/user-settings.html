@@ -1,0 +1,93 @@
+<ion-content>
+    <ion-list>
+      <ion-list-header>
+        <ion-icon item-left name="person"></ion-icon>
+        Personal
+      </ion-list-header>
+      <ion-list-group *ngIf="currentUser?.uid">
+        <ion-item>
+          <ion-label floating showWhen="android">First name</ion-label>
+          <ion-input 
+            #firstNameInput
+            type="text" 
+            [placeholder]="!isMd ? 'First name' : ''"
+            [(ngModel)]="currentUser.firstName"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label floating showWhen="android">Last name</ion-label>
+          <ion-input 
+            #lastNameInput
+            type="text" 
+            [placeholder]="!isMd ? 'Last name' : ''"
+            [(ngModel)]="currentUser.lastName"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label floating showWhen="android">Display name</ion-label>
+          <ion-input 
+            #displayNameInput
+            type="text" 
+            [placeholder]="!isMd ? 'Display name' : ''"
+            [(ngModel)]="currentUser.displayName"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label floating showWhen="android">Email</ion-label>
+            <ion-input 
+                #emailInput
+              type="email" 
+              [placeholder]="!isMd ? 'Email' : ''"
+              [(ngModel)]="currentUser.email"></ion-input>
+          </ion-item>
+        <ion-item>
+          <ion-label floating showWhen="android">Date of birth</ion-label>
+          <ion-datetime 
+            #dob
+            pickerFormat="MM DD YYYY"
+            displayFormat="MMM DD YYYY"
+            [max]="maxDate"
+            [placeholder]="!isMd ? 'Date of birth' : ''"
+            [(ngModel)]="currentUser.birthdate">
+          </ion-datetime>
+        </ion-item>
+        <ion-item>
+            <ion-label floating showWhen="android">Gender</ion-label>
+            <ion-select [(ngModel)]="this.currentUser.gender">
+                <ion-option value="female">Female</ion-option>
+                <ion-option value="male">Male</ion-option>
+                <ion-option value="nonbinary">Non-binary</ion-option>
+            </ion-select>
+        </ion-item>
+      </ion-list-group>
+      <ion-list-header>
+        <ion-icon item-left name="share"></ion-icon>
+        Social
+      </ion-list-header>
+      <ion-item-group>
+        <ion-item>
+          <ion-icon item-left name="logo-googleplus"></ion-icon>
+          <ion-label>Google+</ion-label>
+          <ion-toggle disabled item-right [(ngModel)]="googleConnected" (ionChange)="toggleGoogle()"></ion-toggle>
+        </ion-item>
+        <ion-item>
+            <ion-icon item-left name="logo-facebook"></ion-icon>
+            <ion-label>Facebook</ion-label>
+            <ion-toggle disabled item-right [(ngModel)]="facebookConnected"></ion-toggle>
+        </ion-item>
+        <ion-item>
+            <ion-icon item-left name="logo-instagram"></ion-icon>
+            <ion-label>Instagram</ion-label>
+            <ion-toggle disabled item-right></ion-toggle>
+        </ion-item>
+        <ion-item>
+            <ion-icon item-left name="logo-twitter"></ion-icon>
+            <ion-label>Twitter</ion-label>
+            <ion-toggle disabled item-right [(ngModel)]="twitterConnected"></ion-toggle>
+        </ion-item>
+      </ion-item-group>
+    </ion-list>
+  </ion-content>
+  
+  <ion-footer no-padding no-shadow no-border>
+    <ion-toolbar color="i-faze">
+        <ion-title text-center id="copy-right" color="light">Faze | 2018&copy;</ion-title>
+    </ion-toolbar>
+  </ion-footer>

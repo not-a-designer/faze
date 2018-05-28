@@ -1,0 +1,37 @@
+sign-up {
+    height: auto;
+    ion-input {
+        border-bottom: .5px solid #06f;
+    }
+    button[ion-fab] {
+        box-shadow: none !important;
+    }
+
+    button {
+        color: #fff !important;
+    }
+
+    #register {
+        position: absolute;
+        z-index: 9999999;
+    }
+}
+
+.ios sign-up {
+    #register {
+        top: 157px !important;
+        left: 200px;
+    }
+}
+.md sign-up {
+    #register {
+        top: 240px !important;
+        left: 203px;
+    }
+}
+.wp sign-up {
+    #register {
+        top: 208px !important;
+        left: 198px;
+    }
+}
