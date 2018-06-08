@@ -46,7 +46,8 @@ page-tabs {
         border: 6px solid color($colors, faze, contrast);
         font-size: 5rem !important;
     }
-    #camera-button, #delete { border-radius: 50%; }
+    #camera-button, 
+    #delete { border-radius: 50%; }
 
     /** PLATFORM SPECIFIC **/
     .ios ion-modal {

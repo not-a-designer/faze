@@ -12,10 +12,13 @@ import { AlertController,
 /** APP IMPORTS */
 import { Profile }        from '../../models/classes/profile';
 
+import { slideFromRight } from '../../app/app.animations';
+
 
 @Component({
   selector: 'profile-details',
-  templateUrl: 'profile-details.html'
+  templateUrl: 'profile-details.html',
+  animations: [ slideFromRight ]
 })
 export class ProfileDetailsComponent {
 
@@ -27,6 +30,9 @@ export class ProfileDetailsComponent {
 
   @Output('profileUpdated')
   profileUpdated: EventEmitter<any> = new EventEmitter<any>();
+
+  @Output('action')
+  action: EventEmitter<string> = new EventEmitter<string>();
 
   profile: Profile;
   selectedId: number;
@@ -88,6 +94,8 @@ export class ProfileDetailsComponent {
       ]
     }).present();
   }
+
+  back() { this.action.emit('back') }
 
   showAlarmPicker() {
     this.alarmSet = true;

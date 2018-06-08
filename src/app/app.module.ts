@@ -21,22 +21,25 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { MyApp }                     from './app.component'; 
 import { FIREBASE_CONFIG }           from './app.configs'; 
 import { ComponentsModule }          from '../components/components.module';
-import { DirectiveModule }           from '../directives/directives.module';
+import { DirectivesModule }          from '../directives/directives.module';
 import { PipesModule }               from '../pipes/pipes.module';
-import { LoggerService }             from '../services/logger.service';
 import { AuthService }               from '../services/auth.service';
+import { LoggerService }             from '../services/logger.service';
+import { NotificationService }       from '../services/notifications.service';
+import { ProfileService }            from '../services/profile.service';
 import { StorageService }            from '../services/storage.service';
 import { UserService }               from '../services/user.service';
-import { ProfileService }            from '../services/profile.service';
 
 /***********NATIVE PLUGINS, 3RD PARTY PACKAGE IMPORTS*********/
 //import { AdMobFree }                 from '@ionic-native/admob-free';
 import { CameraPreview }             from '@ionic-native/camera-preview'; 
 import { Diagnostic }                from '@ionic-native/diagnostic';
 import { Facebook }                  from '@ionic-native/facebook';
+import { File }                      from '@ionic-native/file';
 import { GooglePlus }                from '@ionic-native/google-plus';
 import { HeaderColor }               from '@ionic-native/header-color';
 import { InAppBrowser }              from '@ionic-native/in-app-browser';
+import { LocalNotifications }        from '@ionic-native/local-notifications';
 import { PhotoLibrary }              from '@ionic-native/photo-library';
 import { StatusBar }                 from '@ionic-native/status-bar';
 import { SplashScreen }              from '@ionic-native/splash-screen';
@@ -60,6 +63,7 @@ import { TwitterConnect }            from '@ionic-native/twitter-connect';
     AngularFireAuthModule,
     AngularFireDatabaseModule,
     PipesModule,
+    DirectivesModule,
     IonicStorageModule.forRoot()
   ],
 
@@ -76,27 +80,28 @@ import { TwitterConnect }            from '@ionic-native/twitter-connect';
   providers: [
     //AdMobFree,
     AuthService,
+    LoggerService,
+    NotificationService,
+    ProfileService,
+    StorageService,
+    UserService,
     CameraPreview,
     Diagnostic,
     Facebook,
+    File,
     GooglePlus,
     HeaderColor,
     InAppBrowser,
-    LoggerService,
+    LocalNotifications,
     PhotoLibrary,
-    ProfileService,
     StatusBar,
     SplashScreen,
-    StorageService,
     TwitterConnect,
-    UserService,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ],
 
   /** NEEDED FOR CUSTOM COMPONENTS */
   /** SCHEMAS */
-  schemas: [
-    CUSTOM_ELEMENTS_SCHEMA
-  ]
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 export class AppModule {}

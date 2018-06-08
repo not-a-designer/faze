@@ -65,6 +65,18 @@ export class ProfileService {
         catch(deleteErr) { console.log(deleteErr) }
     }
 
+    async setLocalNotifications() {
+        let alarmList: Array<any> = [];
+        try {
+            const uid: string = await this.storage.getUserId();
+            const listRef = this.db.list<Profile>(`profiles/${uid}`).valueChanges();
+            listRef.take(1).forEach(profiles => {
+                for (let p of profiles) alarmList.push(p.alarm);
+            });
+        }
+        catch(e) { console.log(e) }
+    }
+
 /**                                                                    */
 /********************NEW PROFILE PRIVATE METHODS************************/
 /**                                                                    */

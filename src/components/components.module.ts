@@ -12,7 +12,8 @@ import { ProfileDetailsComponent } from './profile-details/profile-details';
 import { TabsNavbarComponent }     from './tabs-navbar/tabs-navbar';
 import { SignInComponent }         from './sign-in/sign-in';
 import { SignUpComponent }         from './sign-up/sign-up';
-import { UserSettingsComponent }   from './user-settings/user-settings'; 
+import { UserSettingsComponent }   from './user-settings/user-settings';
+import { CameraPreviewComponent } from './camera-preview/camera-preview'; 
 
 
 @NgModule({
@@ -22,13 +23,15 @@ import { UserSettingsComponent }   from './user-settings/user-settings';
 	    TabsNavbarComponent,
         SignInComponent,
 		SignUpComponent,
-		UserSettingsComponent
+		UserSettingsComponent,
+        CameraPreviewComponent
 	],
+
 	imports: [
-		//BrowserAnimationsModule,
 		CommonModule,
 		IonicModule
 	],
+
 	exports: [
 		CommonModule,
 		ProfilesListComponent,
@@ -36,10 +39,13 @@ import { UserSettingsComponent }   from './user-settings/user-settings';
 		TabsNavbarComponent,
         SignInComponent,
 		SignUpComponent,
-		UserSettingsComponent
+		UserSettingsComponent,
+        CameraPreviewComponent
 	],
+
 	schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+	
 	//If project contains nested components, add here
-	entryComponents: [ UserSettingsComponent ]
+	entryComponents: [ UserSettingsComponent, CameraPreviewComponent ]
 })
 export class ComponentsModule {}

@@ -1,16 +1,19 @@
 /** ANGULAR REQUIREMENTS */
 import { Component,
          EventEmitter,
-         Output }          from '@angular/core';
+         Output,
+         ViewChild } from '@angular/core';
 
 /** IONIC-ANGULAR REQUIREMENTS */
-import { AlertController } from 'ionic-angular';
+import { AlertController,
+         Button,
+         Platform }  from 'ionic-angular';
 
 /** APP IMPORTS */
-import { User }            from '../../models/classes/user';
+import { User }      from '../../models/classes/user';
 
 /** ANIMATIONS IMPORT */
-import { fadeIn }          from '../../app/app.animations';
+import { fadeIn }    from '../../app/app.animations';
 
 @Component({
   selector: 'tabs-navbar',
@@ -20,24 +23,27 @@ import { fadeIn }          from '../../app/app.animations';
 export class TabsNavbarComponent {
 
   /** DECORATED COMPONENT VARIABLES */
+  //emits:
+  //newProfile, camera, details, share, deleteProfile, home, showSettings, hideSettings, logout
   @Output('action')
   action: EventEmitter<string> = new EventEmitter<string>();
 
-  @Output('update')
-  update: EventEmitter<User> = new EventEmitter<User>();
+  @ViewChild('cameraButton')
+  cameraButton: Button;
 
-  public currentUser: User;
+  //public currentUser: User;
   public profileOptions: boolean = false;
   public activeTab: number;
   public title: string = "Profiles";
   public shareEnabled: boolean = false;
   public settingsEnabled: boolean = true;
 
-  constructor(private alertCtrl: AlertController,) {
+  constructor(private alertCtrl: AlertController,
+              public platform: Platform) {
     console.log('Hello TabsNavbarComponent Component');
   }
 
-  public newProfile() { this.action.emit('new') }
+  public newProfile() { this.action.emit('newProfile') }
 
   public camera() { this.action.emit('camera') }
 
@@ -45,19 +51,19 @@ export class TabsNavbarComponent {
 
   public share() { this.action.emit('share') }
 
+  public delete() { this.action.emit('deleteProfile') }
+
+  public home() { this.action.emit('home') }
+
   public settings() { 
-    this.action.emit('settings');
+    this.action.emit('showSettings');
     this.settingsEnabled = false;
   }
 
   public hide() { 
-    this.action.emit('hide');
+    this.action.emit('hideSettings');
     this.settingsEnabled = true;
   }
-
-  public delete() { this.action.emit('delete') }
-
-  public home() { this.action.emit('home') }
 
   public logout() { this.showLogoutAlert() }
 
@@ -71,8 +77,6 @@ export class TabsNavbarComponent {
 
   public disableShare() { this.shareEnabled = false }
 
-
-  
   private showLogoutAlert() {
     this.alertCtrl.create({
       title: 'Logout',

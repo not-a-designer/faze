@@ -44,7 +44,6 @@
                             <ion-icon color="i-faze" name="arrow-forward"></ion-icon>
                         </button>
                     </ion-fab>
-
                     <img [src]="image">
                 </ion-slide>
             </ion-slides>
@@ -55,29 +54,30 @@
         </ion-card-header>
 
         <ion-card-content no-padding>
-
             <ion-card-title text-center>
-
                 <ion-item>
                     <ion-note item-left>Created: {{ profile.dateCreated }}</ion-note>
                     <ion-note item-right *ngIf="profile.images">
                         {{ profile.images?.length ? profile.images.length  : '' }}
-                        <span *ngIf="profile.images?.length > 1">imgs</span>
-                        <span *ngIf="profile.images?.length === 1">img</span>
+                        <span *ngIf="profile.images && profile.images?.length !== 1">imgs</span>
+                        <span *ngIf="profile.images && profile.images?.length === 1">img</span>
+                    </ion-note>
+                    <ion-note item-right *ngIf="!profile.images">
+                        0 imgs
                     </ion-note>
                 </ion-item>
             </ion-card-title>
             <ion-list no-padding>
-            <ion-item no-lines>
-                <ion-label floating showWhen="android">
-                    Title
-                </ion-label>
-                <ion-input 
+                    
+            <ion-item ion-row no-lines>
+                <ion-label stacked showWhen="android">Title</ion-label>
+                <ion-input
                     type="text" 
                     [placeholder]="!isMd ? 'Profile title' : ''" 
                     [(ngModel)]="profile.name" 
-                    required></ion-input>
-
+                    required>
+                </ion-input>
+                
                 <ion-datetime
                     item-right
                     #alarmPicker
@@ -86,21 +86,31 @@
                     displayFormat="h:mm:A"
                     pickerFormat="h:mm:A">
                 </ion-datetime>  
-
-                <button ion-button icon-left outline item-right (click)="alarmPicker.open()">
+                <!--<button ion-button ion-col col-3 icon-left outline item-right (click)="alarmPicker.open()">
                     <ion-icon name="alarm"></ion-icon>
                     {{ profile.alarm ? profile.alarm : 'Set Alarm' }}
-                </button>
-            </ion-item>
+                </button>-->
+            </ion-item> 
+
+            <ion-item no-lines>
+                <ion-label stacked showWhen="android">Description</ion-label>
+                <ion-textarea [placeholder]="!isMd ? 'Profile description' : ''" [(ngModel)]="profile.desc"></ion-textarea>
+            </ion-item> 
             
-            
-                
-                <ion-item no-lines>
-                    <ion-label floating showWhen="android">Description</ion-label>
-                    <ion-textarea [placeholder]="!isMd ? 'Profile description' : ''" [(ngModel)]="profile.desc"></ion-textarea>
-                </ion-item> 
-                
-                        
-            </ion-list>
-        </ion-card-content>
+            <button ion-button full block icon-left margin-vertical (click)="alarmPicker.open()">
+                <ion-icon name="alarm"></ion-icon>
+                {{ profile.alarm ? profile.alarm : 'Set Alarm' }}
+            </button>
+        </ion-list>
+    </ion-card-content>
 </ion-card>
+<ion-fab right bottom [@slideFromRight]="out">
+    <button 
+        id="back-to-profiles"
+        ion-fab 
+        mini
+        color="i-faze" 
+        (click)="back()">
+        <ion-icon color="faze" name="arrow-forward"></ion-icon>
+    </button>
+</ion-fab>

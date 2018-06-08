@@ -31,6 +31,7 @@ plugins/ios.json
 src/app/app.configs.ts
 www/
 $RECYCLE.BIN/
+package-lock.json
 
 
 .DS_Store

@@ -27,7 +27,7 @@
 
 <ng-template #skeleton>
     <ion-list class="skeleton-list">
-        <button no-lines ion-item class="skeleton-button">
+        <button no-lines ion-item detail-none class="skeleton-button" *ngFor="let skel of skeletons">
             <ion-avatar class="skeleton-avatar" item-left>
                 <img class="skeleton-img">
             </ion-avatar>

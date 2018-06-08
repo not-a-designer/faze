@@ -12,11 +12,14 @@ import { LoginPage }        from './login';
 
 @NgModule({
   declarations: [ LoginPage ],
+
   imports: [
     ComponentsModule,
     IonicPageModule.forChild(LoginPage),
   ],
+
   exports: [ LoginPage ],
+  
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 export class LoginPageModule {}

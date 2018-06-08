@@ -7,7 +7,9 @@ import { CDVPhotoLibraryPipe } from './cdv-photo-library/cdv-photo-library.pipe'
 
 @NgModule({
     declarations: [ CDVPhotoLibraryPipe ],
+
     imports: [ CommonModule ],
+    
     exports: [ CDVPhotoLibraryPipe ]
 })
 export class PipesModule {}

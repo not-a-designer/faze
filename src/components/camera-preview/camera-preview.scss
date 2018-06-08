@@ -1,0 +1,11 @@
+camera-preview {
+    
+    ion-fab { margin-bottom: 15px; }
+    ion-fab[left] { margin-left: 10px; }
+    ion-fab[right] { margin-right: 10px; }
+
+    #capture-previous {
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+}

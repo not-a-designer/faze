@@ -12,11 +12,14 @@ import { TabsPage }         from './tabs';
 
 @NgModule({
   declarations: [ TabsPage ],
+
   imports: [
     ComponentsModule,
     IonicPageModule.forChild(TabsPage)
   ],
+
   exports: [ TabsPage ],
+  
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 export class TabsPageModule {}

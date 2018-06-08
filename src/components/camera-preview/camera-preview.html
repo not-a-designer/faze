@@ -1,0 +1,139 @@
+<!--  CAMERA FAB CONTROLS  -->
+<ng-container>
+  <!--  OPACITY TOGGLE  -->
+  <ion-fab 
+    [@fade]
+    top 
+    left 
+    #opacityFab 
+    *ngIf="!isPicTaken">
+    <button 
+      id="opacity"
+      ion-fab
+      mini 
+      color="transparent"
+      (click)="toggleOpacity()">
+      <ion-icon  color="i-faze" [name]="isOpacityOpen ? 'close' : 'switch'"></ion-icon>
+    </button>
+    <ion-fab-list [@fadeIn] side="right">
+      <ion-range 
+        #opacityRange
+        [(ngModel)]="opacity"
+        min="0"
+        max="100"
+        color="i-faze"
+        id="opacity-slider">
+        <ion-label color="i-faze" range-left>0</ion-label>
+        <ion-label color="i-faze" range-right>{{ opacityRange.value || 0 }}</ion-label>
+      </ion-range>
+    </ion-fab-list>
+  </ion-fab>
+
+  <!--  FLASH BUTTON  -->
+  <ion-fab
+    id="flash"
+    top 
+    right
+    [@fadeIn]
+    *ngIf="flashStatus === true && !(isPicTaken && isOpacityOpen)">
+    <button 
+        ion-fab 
+        mini 
+        color="transparent"
+        (click)="toggleFlash()">
+        <ion-icon color="i-faze" [name]="isFlashOn ? 'sunny' : 'moon'"></ion-icon>
+    </button>
+  </ion-fab>
+</ng-container>
+<!--  END CAMERA CONTROLS  -->
+
+<ng-container>
+  <img 
+    #prevImage 
+    [src]="previousImage" 
+    id="capture-previous" 
+    *ngIf="isOpacityOpen"
+    [ngStyle]="{ 'opacity': (opacity/100) }" />
+
+  <img 
+    #capturedImage 
+    [src]="capture" 
+    id="capture-preview"
+    *ngIf="isPicTaken" />
+</ng-container>
+
+<!--  LEFT FAB  -->
+<ion-fab bottom left [@slideFromLeft]="'in'">
+    <button 
+      ion-fab 
+      mini
+      *ngIf="!isPicTaken" 
+      color="transparent"
+      (click)="goBack()">
+      <ion-icon color="faze" name="arrow-back"></ion-icon>
+    </button>
+
+    <button
+      id="save"
+      ion-fab 
+      mini
+      color="transparent"
+      *ngIf="isPicTaken"
+      (click)="savePreview()">
+      <ion-icon color="faze" name="download"></ion-icon>
+    </button>
+
+</ion-fab>
+
+
+<!--  CENTER FAB BUTTONS  -->
+<ion-fab 
+  center 
+  fixed
+  bottom 
+  [@fade]>
+  <!--  CAPTURE PREVIEW BUTTON  -->
+  <button
+    ion-fab 
+    id="camera-button"
+    color="transparent"
+    *ngIf="!isPicTaken" 
+    (click)="capturePreview()">
+    <ion-icon color="faze" name="camera"></ion-icon>
+  </button>
+  <!--  DELETE PREVIEW  -->
+  <button 
+    ion-fab 
+    id="delete" 
+    color="transparent" 
+    *ngIf="isPicTaken" 
+    (click)="deletePreview()">
+    <ion-icon color="faze" name="close"></ion-icon>
+  </button>
+</ion-fab>
+<!--  END CENTER FAB BUTTONS  -->
+
+
+<!--  RIGHT FAB  -->
+<ion-fab bottom right [@slideFromRight]="'in'">
+  <!-- CAMERA DIRECTION TOGGLE -->
+  <button 
+    ion-fab 
+    mini
+    *ngIf="platform.is('cordova') && !isPicTaken"
+    [color]="isFrontFacing ? 'transparent' : 'faze'" 
+    (click)="toggleCamera()">
+    <ion-icon [color]="isFrontFacing ? 'faze' : 'i-faze'" [name]="isFrontFacing ? 'reverse-camera' : 'person'"></ion-icon>
+  </button>
+
+  <!-- CONTINUE BUTTON -->
+  <!--  TODO  -->
+  <button 
+    id="next"
+    ion-fab 
+    mini
+    color="transparent"
+    *ngIf="isPicTaken">
+    <ion-icon color="faze" name="return-right"></ion-icon>
+  </button>
+</ion-fab>

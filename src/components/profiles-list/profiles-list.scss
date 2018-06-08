@@ -25,19 +25,24 @@ profiles-list {
     }
 
     .skeleton-avatar {
-        
-    }
-
-    .skeleton-img {
         border-radius: 50%;
         background-color: #ffcc00;
     }
 
-    .skeleton-h2 {
+    .skeleton-img {
+       
+    }
 
+    .skeleton-h2 {
+        background-color: gray;
+        min-width: 40vw;
+        min-height: 20px;
     }
 
     .skeleton-h3 {
-
+        background-color: gray;
+        max-width: 25vw;
+        min-height: 20px;
+        margin-top: 5px;
     }
 }

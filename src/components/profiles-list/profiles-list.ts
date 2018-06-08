@@ -1,7 +1,6 @@
 /*****************ANGULAR REQUIREMENTS*****************/
 import { Component,
          EventEmitter,
-         AfterViewInit,
          Output }         from '@angular/core';
 
 import { Platform }       from 'ionic-angular';
@@ -25,15 +24,18 @@ import { Observable }     from 'rxjs/Observable';
 @Component({
   selector: 'profiles-list',
   templateUrl: 'profiles-list.html',
-  animations: [fade]
+  animations: [ fade ]
 })
-export class ProfilesListComponent implements AfterViewInit {
+export class ProfilesListComponent {
 
-  @Output() action: EventEmitter<string> = new EventEmitter<string>();
+  @Output('action') 
+  action: EventEmitter<string> = new EventEmitter<string>();
 
   //emits profile id string
-  @Output() selectProfile: EventEmitter<Profile> = new EventEmitter<Profile>();
-  @Output() deleteProfile: EventEmitter<string> = new EventEmitter<string>();
+  @Output() 
+  selectProfile: EventEmitter<Profile> = new EventEmitter<Profile>();
+  @Output() 
+  deleteProfile: EventEmitter<string> = new EventEmitter<string>();
 
   profiles: Profile[] = [];
   profiles$: Observable<Profile[]>;
@@ -41,9 +43,9 @@ export class ProfilesListComponent implements AfterViewInit {
   isLoading: boolean = true;
   uid: string;
 
+  skeletons: Array<number> = new Array(4);
+
   constructor(private platform: Platform,
-              //private alertCtrl: AlertController,
-              //private loadingCtrl: LoadingController,
               private profileService: ProfileService,
               private logger: LoggerService
               //private storage: StorageService,
@@ -60,9 +62,7 @@ export class ProfilesListComponent implements AfterViewInit {
     }*/
   }
 
-  ngAfterViewInit() {
-    this.profiles.forEach(p => console.log(`ProfileId: ${p.id}`));
-  }
+  //ngAfterViewInit() { this.profiles.forEach(p => console.log(`ProfileId: ${p.id}`)) }
 
   public async loadProfiles() {
     try {
@@ -75,6 +75,7 @@ export class ProfilesListComponent implements AfterViewInit {
           return prfLst;
         });
       this.selectedId = null;
+      this.profileService.setLocalNotifications();
     }
     catch(e) { this.logger.logError(`error loading profiles ${e.message}`) }
   }

@@ -185,4 +185,17 @@ export class LoginPage {
     }
     catch(e) { this.logger.logError(`registration error, ${e.message}`) }
   }
+
+  async ionViewCanLeave(): Promise<boolean> {
+    try {
+      console.log('checking for saved user...');
+      const id = await this.storage.fetchFromStorage('userId');
+      if (id) {
+        console.log('user found, loading tabs page...');
+        return true;
+      }
+        else return false;
+    }
+    catch(e) { console.log('not logged in') }
+  }
 }

@@ -1,10 +1,14 @@
-import { NgModule }     from '@angular/core';
+import { NgModule }              from '@angular/core';
+import { CommonModule }          from '@angular/common';
 
-import { CommonModule } from '@angular/common';
+import { DefaultImageDirective } from './default-image/default-image.directive';
 
 
 @NgModule({
-    declarations: [],
-    imports: [],
-    exports: []
-})export class DirectiveModule {}
+    declarations: [ DefaultImageDirective ],
+
+    imports: [ CommonModule ],
+
+    exports: [ DefaultImageDirective ]
+})
+export class DirectivesModule {}

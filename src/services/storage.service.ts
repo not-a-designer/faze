@@ -1,8 +1,8 @@
 /**********ANGULAR REQUIREMENTS**********/
-import { Injectable } from '@angular/core';
+import { Injectable }   from '@angular/core';
 
 /***********IONIC LOCAL STORAGE**********/
-import { Storage } from '@ionic/storage';
+import { Storage }      from '@ionic/storage';
 
 /************LOGGER SERVICE**************/
 import { LoggerService } from '../services/logger.service';
