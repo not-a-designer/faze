@@ -1,50 +1,20 @@
 
-    <ion-card *ngIf="profile" no-padding>
+    <ion-card *ngIf="profile" no-padding class="scroll-content">
         <ion-card-header no-lines no-margin no-padding>
             <ion-slides 
                 #thumbSlide 
                 id="thumbSlide" 
-                *ngIf="profile.images?.length; else noPics">
+                *ngIf="profile.images?.length; else noPics"
+                [initialSlide]="profile.images?.length - 1"
+                (ionSlideDidChange)="toggleSlideLock()">
 
-                <ion-slide 
-                    no-padding
-                    *ngFor="let image of profile.images; let i = index"
-                    pager="true"
-                    paginationType="bullet">
-
+                <ion-slide no-padding *ngFor="let image of profile.images; let i = index" pager="true" paginationType="bullet">
                     <ion-fab top right>
-                        <button 
-                            ion-fab 
-                            mini 
-                            outline
-                            id="remove"
-                            (click)="remove(i)">
-                            <ion-icon color="i-faze" name="close"></ion-icon>
+                        <button ion-fab mini outline id="remove" (click)="remove(i)">
+                            <ion-icon color="faze" name="close"></ion-icon>
                         </button>
                     </ion-fab>
-
-                    <ion-fab bottom left *ngIf="!thumbSlide.isBeginning()">
-                        <button 
-                            ion-fab 
-                            mini 
-                            id="prev"
-                            outline 
-                            (click)="slidePrev()">
-                            <ion-icon color="i-faze" name="arrow-back"></ion-icon>
-                        </button>
-                    </ion-fab>
-
-                    <ion-fab bottom right *ngIf="!thumbSlide.isEnd()">
-                        <button 
-                            ion-fab 
-                            mini
-                            id="forward"
-                            outline 
-                            (click)="slideNext()">
-                            <ion-icon color="i-faze" name="arrow-forward"></ion-icon>
-                        </button>
-                    </ion-fab>
-                    <img [src]="image">
+                    <img [ngStyle]="{ 'max-height': platform.width() }" [src]="image">
                 </ion-slide>
             </ion-slides>
 
@@ -57,39 +27,35 @@
             <ion-card-title text-center>
                 <ion-item>
                     <ion-note item-left>Created: {{ profile.dateCreated }}</ion-note>
-                    <ion-note item-right *ngIf="profile.images">
+                    <!--<ion-note item-right *ngIf="profile.images">
                         {{ profile.images?.length ? profile.images.length  : '' }}
                         <span *ngIf="profile.images && profile.images?.length !== 1">imgs</span>
                         <span *ngIf="profile.images && profile.images?.length === 1">img</span>
                     </ion-note>
                     <ion-note item-right *ngIf="!profile.images">
                         0 imgs
-                    </ion-note>
+                    </ion-note>-->
+                    <ion-chip item-right>
+                        <ion-label>{{ currentThumbnail }} / {{ profile.images?.length }}</ion-label>
+                    </ion-chip>
                 </ion-item>
             </ion-card-title>
             <ion-list no-padding>
                     
             <ion-item ion-row no-lines>
                 <ion-label stacked showWhen="android">Title</ion-label>
-                <ion-input
-                    type="text" 
-                    [placeholder]="!isMd ? 'Profile title' : ''" 
-                    [(ngModel)]="profile.name" 
-                    required>
+                <ion-input type="text" [placeholder]="!isMd ? 'Profile title' : ''" [(ngModel)]="profile.name" required>
                 </ion-input>
                 
-                <ion-datetime
-                    item-right
-                    #alarmPicker
-                    hidden
-                    [(ngModel)]="profile.alarm"
-                    displayFormat="h:mm:A"
-                    pickerFormat="h:mm:A">
-                </ion-datetime>  
-                <!--<button ion-button ion-col col-3 icon-left outline item-right (click)="alarmPicker.open()">
-                    <ion-icon name="alarm"></ion-icon>
-                    {{ profile.alarm ? profile.alarm : 'Set Alarm' }}
-                </button>-->
+                <ion-datetime 
+                    item-right 
+                    #alarmPicker 
+                    hidden 
+                    [(ngModel)]="profile.alarm" 
+                    displayFormat="h:mm:A" 
+                    pickerFormat="h:mm:A"
+                    (ionChange)="updateAlarm($event)">
+                </ion-datetime>
             </ion-item> 
 
             <ion-item no-lines>
@@ -104,13 +70,9 @@
         </ion-list>
     </ion-card-content>
 </ion-card>
+
 <ion-fab right bottom [@slideFromRight]="out">
-    <button 
-        id="back-to-profiles"
-        ion-fab 
-        mini
-        color="i-faze" 
-        (click)="back()">
+    <button id="back-to-profiles" ion-fab mini color="i-faze" (click)="back()">
         <ion-icon color="faze" name="arrow-forward"></ion-icon>
     </button>
 </ion-fab>

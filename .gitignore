@@ -32,6 +32,7 @@ src/app/app.configs.ts
 www/
 $RECYCLE.BIN/
 package-lock.json
+google-services.json
 
 
 .DS_Store

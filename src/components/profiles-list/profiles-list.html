@@ -1,7 +1,7 @@
 <ion-list no-padding *ngIf="profiles$ | async as profiles; else skeleton">
     <ng-container *ngIf="profiles.length > 0; else noProfiles">
         <button 
-            *ngFor="let profile of profiles"
+            *ngFor="let profile of profiles; let i = index"
             ion-item 
             detail-none 
             no-lines
@@ -10,12 +10,17 @@
             id="profile-item"
             (click)="toggle(profile)"
             (press)="delete(profile)">
-            <ion-avatar item-left *ngIf="profile.images">
-                <img src="profile.images[0]">
+            <ion-avatar item-left *ngIf="profile.images?.length">
+                <img [src]="profile.images[profile.images.length - 1]">
             </ion-avatar>
-            <ion-icon item-left *ngIf="!profiles.images" color="danger" name="alert"></ion-icon>
+            <ion-icon item-left *ngIf="!profile.images?.length > 0" color="danger" name="alert"></ion-icon>
             <h2 ion-text>{{ profile.name }}</h2>
             <h3 ion-text text-wrap>{{ profile?.desc }}</h3>
+            <ion-note item-right *ngIf="profile.images?.length > 0">
+                {{profile.images.length}}
+                <span *ngIf="profile.images.length > 1">imgs</span>
+                <span *ngIf="profile.images.length === 1">img</span>
+            </ion-note>
         </button>    
     </ng-container>
     <ng-template #noProfiles>

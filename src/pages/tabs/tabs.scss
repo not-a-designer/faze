@@ -29,25 +29,17 @@ page-tabs {
         background-color: #fff !important;
     }
     
-    #camera-slide { background-color: transparent !important; }
+    #camera-slide { 
+        //background-color: transparent !important;
+        background-size: cover;
+        background-repeat: no-repeat;
+        overflow: hidden;
+    }
 
     #delete, #save, #next, #flash, #opacity {
         box-shadow: none;
         -webkit-box-shadow: none;
     }
-
-    #opacity-slider {
-        min-width: 75vw; 
-        margin-left: -15px;
-    }
-
-    #camera-button { border: 2px solid color($colors, faze, base); }
-    #delete {
-        border: 6px solid color($colors, faze, contrast);
-        font-size: 5rem !important;
-    }
-    #camera-button, 
-    #delete { border-radius: 50%; }
 
     /** PLATFORM SPECIFIC **/
     .ios ion-modal {

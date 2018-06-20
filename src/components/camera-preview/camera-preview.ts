@@ -1,19 +1,15 @@
 import { Component,
          EventEmitter,
          Input,
-         Output,
-         ViewChild }                   from '@angular/core';
+         Output }        from '@angular/core';
 
-import { FabContainer,
-         Platform,
-         Range }                       from 'ionic-angular';
-
-import { LoggerService }              from '../../services/logger.service';
+import { AlertController,
+         Platform }      from 'ionic-angular';
 
 import { fade, 
          fadeIn, 
          slideFromRight, 
-         slideFromLeft }              from '../../app/app.animations';
+         slideFromLeft } from '../../app/app.animations';
 
 
 @Component({
@@ -22,15 +18,6 @@ import { fade,
   animations: [ fade, fadeIn, slideFromRight, slideFromLeft ]
 })
 export class CameraPreviewComponent {
- 
-  @ViewChild('opacityFab')
-  opacityFab: FabContainer;
-
-  @ViewChild(Range)
-  opacityRange: Range;
-
-  @ViewChild(HTMLImageElement)
-  captureImage: HTMLImageElement;
 
   //emits:
   //capturePreview, savePreview, deletePreview, back, toggleDirection, toggleFlash
@@ -39,6 +26,9 @@ export class CameraPreviewComponent {
 
   @Input('capture')
   capture: string;
+
+  @Input('previous')
+  prev: string;
 
   @Input('flashStatus')
   flashStatus: boolean;
@@ -56,16 +46,15 @@ export class CameraPreviewComponent {
   isOpacityOpen: boolean = false;
 
   /** previous image overlay opacity */
-  opacity: number = 0;
+  opacity: number = 1;
 
-  
-  screenWidth: string = this.platform.width().toString();
-  previousImage = `http://via.placeholder.com/${this.screenWidth}`;
+  //screenWidth: string = this.platform.width().toString();
+  //previousImage = `http://via.placeholder.com/${this.screenWidth}`;
   //previousImage: string;
 
   
 
-  constructor(private logger: LoggerService,
+  constructor(private alertCtrl: AlertController,
               public platform: Platform) {
 
     console.log('Hello CameraPreviewComponent Component');  
@@ -73,23 +62,35 @@ export class CameraPreviewComponent {
   
   public capturePreview() { 
     this.isOpacityOpen = false;
-    //this.isPicTaken = true;
     this.action.emit('capturePreview');
   }
 
-  public deletePreview() {
-    this.action.emit('deletePreview'); 
+  public deletePreview() { 
+    this.alertCtrl.create({
+      title: 'Delete Capture',
+      message: 'Are you sure you want to delete the preview?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => console.log('dont delete')
+        }, {
+          text: 'Delete',
+          role: 'destructive',
+          handler: () => this.action.emit('deletePreview')
+        }
+      ]
+    }).present();
   }
 
-  public savePreview() {
-    this.action.emit('savePreview');
-  }
+  public savePreview() { this.action.emit('savePreview') }
 
-  public goBack() { 
-    this.action.emit('back');
-  }
+  public goBack() { this.action.emit('back')}
 
-  public toggleOpacity() { this.isOpacityOpen = !this.isOpacityOpen }
+  public toggleOpacity() { 
+    this.isOpacityOpen = !this.isOpacityOpen;
+    this.flashStatus = !this.flashStatus;
+  }
 
   public toggleCamera() {
     this.action.emit('toggleDirection');
@@ -101,5 +102,9 @@ export class CameraPreviewComponent {
     this.isFlashOn = !this.isFlashOn;
   }
 
-
+  get isNative() { 
+    return (this.platform.is('cordova') || 
+            this.platform.is('android') || 
+            this.platform.is('ios')) 
+  }
 }

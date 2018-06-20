@@ -1,5 +1,5 @@
 <ion-header ion-fixed [@fade] *ngIf="getCurrentTab() !== 2">
-  <tabs-navbar (action)="handleActions($event)"></tabs-navbar>
+  <tabs-navbar (action)="handleActions($event)" [activeTab]="getCurrentTab()"></tabs-navbar>
 </ion-header>
 
 <!--  SLIDING TAB CONTENT  -->
@@ -16,36 +16,30 @@
     #tabs 
     id="tabs" 
     centeredSlides="false" 
-    initialSlide="1"
-    (ionSlideDidChange)="resizeTabs()"
-    (ionSlideWillChange)="unlockTabs()">
+    initialSlide="1" 
+    (ionSlideDidChange)="resizeTabs()">
+    <!--(ionSlideWillChange)="unlockTabs()">-->
 
     <ion-slide id="details-slide">      
-      <profile-details 
-        class="scroll-content" 
-        (action)="handleActions($event)">
+      <profile-details class="scroll-content" (action)="handleActions($event)">
       </profile-details>
     </ion-slide>
 
     <ion-slide id="profiles-slide">
-      <profiles-list 
-        class="scroll-content"
-        (selectProfile)="toggleProfile($event)"
-        (deleteProfile)="deleteProfile($event)">
+      <profiles-list class="scroll-content" (action)="handleActions($event)">
       </profiles-list>
       <user-settings></user-settings>
     </ion-slide>
 
-    <ion-slide id="camera-slide">
+    <ion-slide id="camera-slide" [ngStyle]="{ 'background-image': cameraBackground }">
       <camera-preview 
-        (action)="handleActions($event)"
-        [capture]="previewImage"
+        (action)="handleActions($event)" 
+        [previous]="previousImage"
+        [capture]="previewImage" 
         [flashStatus]="isFlashAvailable">
       </camera-preview>
     </ion-slide>
-    
   </ion-slides>
-  <!--  END TABS -->
 </ion-content>
 
 

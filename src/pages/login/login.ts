@@ -7,8 +7,7 @@ import { IonicPage,
          Loading,
          LoadingController,
          NavController, 
-         NavParams,
-         Platform }        from 'ionic-angular';
+         NavParams }       from 'ionic-angular';
 
 /*****************APP IMPORTS*****************/
 import { AuthService }     from '../../services/auth.service';
@@ -40,7 +39,6 @@ export class LoginPage {
               public navParams: NavParams,
               private alertCtrl: AlertController,
               private loadingCtrl: LoadingController,
-              private platform: Platform,
               private authService: AuthService,
               private logger: LoggerService,
               private storage: StorageService,

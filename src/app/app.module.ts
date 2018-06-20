@@ -16,6 +16,7 @@ import { IonicStorageModule }        from '@ionic/storage';
 import { AngularFireModule }         from 'angularfire2';
 import { AngularFireAuthModule }     from 'angularfire2/auth';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFireStorageModule }  from 'angularfire2/storage'
 
 /*************************APP IMPORTS**************************/  
 import { MyApp }                     from './app.component'; 
@@ -25,13 +26,13 @@ import { DirectivesModule }          from '../directives/directives.module';
 import { PipesModule }               from '../pipes/pipes.module';
 import { AuthService }               from '../services/auth.service';
 import { LoggerService }             from '../services/logger.service';
-import { NotificationService }       from '../services/notifications.service';
 import { ProfileService }            from '../services/profile.service';
 import { StorageService }            from '../services/storage.service';
 import { UserService }               from '../services/user.service';
 
 /***********NATIVE PLUGINS, 3RD PARTY PACKAGE IMPORTS*********/
 //import { AdMobFree }                 from '@ionic-native/admob-free';
+import { BackgroundMode }            from '@ionic-native/background-mode';
 import { CameraPreview }             from '@ionic-native/camera-preview'; 
 import { Diagnostic }                from '@ionic-native/diagnostic';
 import { Facebook }                  from '@ionic-native/facebook';
@@ -62,6 +63,7 @@ import { TwitterConnect }            from '@ionic-native/twitter-connect';
     AngularFireModule.initializeApp(FIREBASE_CONFIG),
     AngularFireAuthModule,
     AngularFireDatabaseModule,
+    AngularFireStorageModule,
     PipesModule,
     DirectivesModule,
     IonicStorageModule.forRoot()
@@ -81,10 +83,10 @@ import { TwitterConnect }            from '@ionic-native/twitter-connect';
     //AdMobFree,
     AuthService,
     LoggerService,
-    NotificationService,
     ProfileService,
     StorageService,
     UserService,
+    BackgroundMode,
     CameraPreview,
     Diagnostic,
     Facebook,

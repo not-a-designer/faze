@@ -15,15 +15,18 @@ import moment                  from 'moment';
 export class ProfileService {
 
     profiles: Profile[] = [];
+    //userId
     selectedId: string;
 
-    constructor(private db: AngularFireDatabase, private storage: StorageService) {
+    constructor(private db: AngularFireDatabase, 
+                private storage: StorageService) {
         this.fetchProfiles();
     }
     //firebase methods
     async fetchProfiles(): Promise<Observable<Profile[]>>  { 
         try {
             const id: string = await this.storage.getUserId();
+            this.selectedId = id;
             return this.db.list<Profile>(`profiles/${id}`).valueChanges();
         }
         catch(fetchErr) { console.log(fetchErr) }
@@ -31,8 +34,8 @@ export class ProfileService {
 
     async updateProfile(p: Partial<Profile>) {
         try { 
-            const uid: string = await this.storage.getUserId();
-            const pRef = this.db.object<Profile>(`profiles/${uid}/${p.id}`);
+            //const uid: string = await this.storage.getUserId();
+            const pRef = this.db.object<Profile>(`profiles/${this.selectedId}/${p.id}`);
             pRef.update(p);
         }
         catch(updateErr) { console.log(updateErr) }
@@ -40,12 +43,14 @@ export class ProfileService {
 
     async addProfile(p: Partial<Profile>) {
         try {
-            const uid: string = await this.storage.getUserId();
+            //const uid: string = await this.storage.getUserId();
             const key = await this.getNewProfileId();
             console.log('newEntry id', key);
-            let pRef = this.db.object<Profile>(`profiles/${uid}/${key}`);
+            let pRef = this.db.object<Profile>(`profiles/${this.selectedId}/${key}`);
             const newProfile = {
-                alarm: p.alarm,
+                alarmAt: p.alarmAt,
+                alarmId: p.alarmId,
+                alarmText: p.alarmText,
                 desc: p.desc ? p.desc : 'sample',
                 id: key,
                 name: p.name,
@@ -58,24 +63,22 @@ export class ProfileService {
 
     async deleteProfile(id: string) {
         try {
-            const uid: string = await this.storage.getUserId();
-            let pRef = this.db.object<Profile>(`profiles/${uid}/${id}`);
+            //const uid: string = await this.storage.getUserId();
+            let pRef = this.db.object<Profile>(`profiles/${this.selectedId}/${id}`);
             pRef.remove();
         }
         catch(deleteErr) { console.log(deleteErr) }
     }
 
-    async setLocalNotifications() {
-        let alarmList: Array<any> = [];
+    async deleteImage(id: string, index: number) {
         try {
-            const uid: string = await this.storage.getUserId();
-            const listRef = this.db.list<Profile>(`profiles/${uid}`).valueChanges();
-            listRef.take(1).forEach(profiles => {
-                for (let p of profiles) alarmList.push(p.alarm);
-            });
+            //const uid: string = await this.storage.getUserId();
+            let iRef = this.db.object<Profile>(`profiles/${this.selectedId}/${id}/images/${index}`);
+            iRef.remove();
         }
         catch(e) { console.log(e) }
     }
+
 
 /**                                                                    */
 /********************NEW PROFILE PRIVATE METHODS************************/

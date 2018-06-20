@@ -9,40 +9,44 @@ profiles-list {
         border-radius: 5px 5px 0 0 !important;
     }
 
-    ion-avatar {
-        border-radius: 50%;
-        border: 2px solid color($colors, faze, base);
-    }
-    ion-thumbnail > img {
-        border: 0px !important;
-    }
-
-    .skeleton-list {
-        
-    }
-    .skeleton-button {
-
-    }
-
     .skeleton-avatar {
         border-radius: 50%;
         background-color: #ffcc00;
     }
 
-    .skeleton-img {
-       
-    }
-
     .skeleton-h2 {
-        background-color: gray;
+        background-color: darkgray;
+        border-radius: 5px;
         min-width: 40vw;
         min-height: 20px;
     }
+    .skeleton-h2:after {
+        content:'';
+        top:0;
+        transform:translateX(100%);
+        width:100%;
+        height:20px;
+        position: absolute;
+        z-index:1;
+        animation: slide 1.5s infinite;
+    }
 
     .skeleton-h3 {
-        background-color: gray;
+        background-color: darkgray;
+        border-radius: 5px;
         max-width: 25vw;
         min-height: 20px;
         margin-top: 5px;
+    }
+
+    .skeleton-h3:after {
+        content:'';
+        top:0;
+        transform:translateX(100%);
+        width:100%;
+        height:20px;
+        position: absolute;
+        z-index:1;
+        animation: slide .5s infinite;
     }
 }

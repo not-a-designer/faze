@@ -1,6 +1,7 @@
 /** ANGULAR REQUIREMENTS */
 import { Component,
          EventEmitter,
+         Input,
          Output,
          ViewChild } from '@angular/core';
 
@@ -8,9 +9,6 @@ import { Component,
 import { AlertController,
          Button,
          Platform }  from 'ionic-angular';
-
-/** APP IMPORTS */
-import { User }      from '../../models/classes/user';
 
 /** ANIMATIONS IMPORT */
 import { fadeIn }    from '../../app/app.animations';
@@ -31,9 +29,11 @@ export class TabsNavbarComponent {
   @ViewChild('cameraButton')
   cameraButton: Button;
 
+  @Input('activeTab')
+  activeTab: number;
   //public currentUser: User;
   public profileOptions: boolean = false;
-  public activeTab: number;
+  
   public title: string = "Profiles";
   public shareEnabled: boolean = false;
   public settingsEnabled: boolean = true;
@@ -70,12 +70,6 @@ export class TabsNavbarComponent {
   public changeTitle(newTitle: string) { this.title = newTitle }
 
   public toggleProfileOptions() { this.profileOptions = !this.profileOptions }
-
-  public toggleSettingsEnabled() { this.settingsEnabled = !this.settingsEnabled }
-
-  public enableShare() { this.shareEnabled = true }
-
-  public disableShare() { this.shareEnabled = false }
 
   private showLogoutAlert() {
     this.alertCtrl.create({

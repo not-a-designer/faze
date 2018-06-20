@@ -1,6 +1,11 @@
+import { AlarmData } from '../interfaces/alarm-data.interface';
+
+
 export class Profile {
 
-    alarm: string;
+    alarmAt: Date;
+    alarmId: number
+    alarmText: string
     dateCreated: string;
     name: string;
     id: string;

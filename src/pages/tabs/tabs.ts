@@ -21,11 +21,10 @@ import { CameraPreview,
          CameraPreviewDimensions,
          CameraPreviewOptions, 
          CameraPreviewPictureOptions } from '@ionic-native/camera-preview';
-
 import { Diagnostic }                  from '@ionic-native/diagnostic';
-
-import { PhotoLibrary, LibraryItem }   from '@ionic-native/photo-library';
-
+import { LocalNotifications }          from '@ionic-native/local-notifications';
+import { PhotoLibrary, 
+         LibraryItem }                 from '@ionic-native/photo-library';
 import { StatusBar }                   from '@ionic-native/status-bar';
 
 /*******************************APP IMPORTS*******************************/
@@ -40,7 +39,6 @@ import { TabsNavbarComponent }         from '../../components/tabs-navbar/tabs-n
 import { UserSettingsComponent }       from '../../components/user-settings/user-settings';
 //SERVICES
 import { AuthService }                 from '../../services/auth.service';
-//import { ImageStorageService }         from '../../services/image-storage.service';
 import { LoggerService }               from '../../services/logger.service';
 import { ProfileService }              from '../../services/profile.service';
 import { StorageService }              from '../../services/storage.service';
@@ -113,6 +111,7 @@ export class TabsPage {
   /*************PAGE VARIABLES**************/
 
   //
+  
   activeUser: User = null;
   userId: string = null;
   previewImage: string;
@@ -156,7 +155,10 @@ export class TabsPage {
   isSettingsVisible: boolean = true;
   isFlashAvailable: boolean = true;
 
+  nextAlarmId: number;
+
   settingsModal: Modal;
+  cameraBackground: string = `linear-gradient(to bottom, transparent, transparent ${this.platform.width()}px, #fff ${this.platform.width()}px, #fff)`;
 /***************END PAGE VARIABLES*****************/ 
 
   constructor(public navCtrl: NavController,
@@ -174,13 +176,29 @@ export class TabsPage {
               private storage: StorageService,
               private cameraPreview: CameraPreview,
               private diagnostic: Diagnostic,
+              private notifications: LocalNotifications,
               private photoLibrary: PhotoLibrary,
               private statusBar: StatusBar) {}
 
   /********LIFECYCLE HOOK FUNCTIONS********/
   async ionViewDidLoad() {
     console.log('ionViewDidLoad TabsPage');
-    
+
+    this.platform.registerBackButtonAction(() => {
+      let activeNav = this.navCtrl.getActive();
+      //if alert or modal or toast
+      if (activeNav.isOverlay) activeNav.dismiss();
+      else {
+        //if main profiles page
+        if (this.getCurrentTab() === 1) this.logout();
+
+        else {
+          if (this.camPrevCmp.isPicTaken) this.camPrevCmp.deletePreview();
+          else this.slideToProfiles();
+        }
+      }
+    });
+
     try {
       this.userId = (this.navParams.data.userId) ? 
         this.navParams.data.userId : 
@@ -191,10 +209,7 @@ export class TabsPage {
         this.userService.getUser(this.userId)
         .valueChanges()
         .take(1)
-        .subscribe((u: User) => {
-          this.activeUser = u;
-          //this.tabsNavbarCmp.currentUser = this.activeUser;
-        });
+        .subscribe((u: User) => this.activeUser = u);
       }
       else {
         this.authService.user$.subscribe((user: User) => {
@@ -209,7 +224,13 @@ export class TabsPage {
       this.tabs.centeredSlides = false;
       this.tabs.initialSlide = this.navParams.data.index ? this.navParams.data.index : 1; 
       this.profilesListCmp.loadProfiles(); 
-      this.checkCameraPermissions();
+      
+      this.checkPermissions();
+      const scheduled = await this.notifications.getAllScheduled();
+      let totalAlarms: number = scheduled.length > 0 ? scheduled.length : 0;
+      this.nextAlarmId = totalAlarms + 1;
+      this.logger.logCompleted(`${totalAlarms} alarm(s) scheduled`);
+      
     }
     catch(e) { this.logger.logError(`error loading user ${e.message}`) }
   }
@@ -228,8 +249,6 @@ export class TabsPage {
   /*********************************************************************************/
  /*******************************PAGE FUNCTIONS************************************/
 /*********************************************************************************/
-
-
   /***************************************************/
  /**************NAVIGATION METHODS*******************/
 /***************************************************/
@@ -238,7 +257,6 @@ export class TabsPage {
     if (event === 'newProfile') this.showNewProfileAlert();
     else if (event === 'share') this.showShareOptions();
     else if (event === 'camera') this.slideToCamera();
-    else if (event === 'deleteProfile') this.deleteProfile(this.selectedProfile.id);
     else if (event === 'details') this.slideToDetails();
     else if (event === 'showSettings') this.showSettings();
     else if (event === 'hideSettings') this.dismissSettings();
@@ -250,32 +268,39 @@ export class TabsPage {
     else if (event === 'savePreview') this.savePreview(this.previewImage);
     else if (event === 'toggleDirection') this.switchCamera();
     else if (event === 'toggleFlash') this.toggleFlash();
+    //profile list
+    else if (event === 'toggle') this.toggleProfile()
     //dual purpose
+    else if (event === 'deleteProfile') this.deleteProfile(this.selectedProfile.id);
     else if (event === 'back') this.slideToProfiles();
     else console.log('action error');
   }
 
   public getCurrentTab() { return this.tabs.getActiveIndex() }
 
-  toggleProfile(event) {
-    if (event == null) {
+  toggleProfile() {
+    if (this.profilesListCmp.selectedId == null) {
       this.selectedId = null;
       this.selectedProfile = null;
       this.tabsNavbarCmp.changeTitle('Profiles');
       this.tabsNavbarCmp.profileOptions = false;
+      this.tabsNavbarCmp.shareEnabled = false;
     }
     else {
-      this.selectedId = event.id;
-      this.selectedProfile = event;
-      this.tabsNavbarCmp.changeTitle(event.name);
+      this.selectedId = this.profilesListCmp.selectedId;
+      this.selectedProfile = this.profilesListCmp.selectedProfile;
+      if (!this.selectedProfile['images']) this.selectedProfile.images = [];
+      this.tabsNavbarCmp.changeTitle(this.selectedProfile.name);
       this.tabsNavbarCmp.profileOptions = true;
+      this.tabsNavbarCmp.shareEnabled = (this.selectedProfile.images.length > 10);
     }
   }
 
   public slideToCamera() {
     this.showCamera();
     this.unlockTabs();
-    if (this.selectedProfile.images && this.selectedProfile.images.length > 2) {
+    this.camPrevCmp.isOpacityOpen = false;
+    if (this.selectedProfile.images && this.selectedProfile.images.length > 1) {
       const len: number = this.selectedProfile.images.length - 1;
       this.previousImage = this.selectedProfile.images[len];
     }
@@ -286,6 +311,9 @@ export class TabsPage {
   }
 
   public slideToDetails() {
+    this.statusBar.show();
+    //if (this.getCurrentTab() === 0) this.profileService.updateProfile(this.profileDetailsCmp.profile);
+
     if (this.selectedId == null) return;
     else {
       this.profileDetailsCmp.loadProfile(this.selectedProfile);
@@ -314,11 +342,17 @@ export class TabsPage {
       this.profilesListCmp.profiles.forEach(p => console.log(p.id));
       loader.dismiss();
       this.tabsNavbarCmp.activeTab = 1;
-      this.toggleProfile(null);
+      this.selectedProfile = null;
+      this.selectedId = null;
+      //this.toggleProfile();
     }, 750);
   }
 
-  
+  private async checkPermissions() {
+    this.checkCameraPermissions();
+    this.checkPhotoLibraryPermissions();
+    this.checkNotificationPermissions();
+  }
 
   public refreshProfiles(refresher) {
     console.log('begin refresher', refresher);
@@ -371,15 +405,16 @@ export class TabsPage {
     
     setTimeout(() => {
       this.settingsModal.dismiss();
+      this.tabsNavbarCmp.changeTitle('Profiles');
       loader.dismiss();
     }, 750);
-   }
+  }
    
-   public logout() {
-     this.settingsModal.dismiss();
-     this.authService.signOut();
-     this.navCtrl.setRoot('LoginPage');
-   }
+  public logout() {
+    this.settingsModal.dismiss();
+    this.authService.signOut();
+    this.navCtrl.setRoot('LoginPage');
+  }
 
   //event paramater should be profile id from template
   public deleteProfile(event: string) {
@@ -431,16 +466,21 @@ export class TabsPage {
         }, {
           text: 'Start',
           handler: (data) => {
+
             const loader = this.loadingCtrl.create({
               content: 'creating profile...'
             });
+
             loader.onDidDismiss(() => {
               this.profilesListCmp.loadProfiles();
             });
+
             loader.present();
 
             this.profileService.addProfile({
-              alarm: data.alarm, 
+              alarmAt: new Date(data.alarm), 
+              alarmId: this.nextAlarmId,
+              alarmText: `Time to snap a picture for your ${data.name} Faze lapse!`,
               name: data.name, 
               desc: data.desc
             });
@@ -449,14 +489,11 @@ export class TabsPage {
           }
         }
       ]
-    }).present()
+    }).present();
   }
 
   /** CAMERA FUNCTIONS */
-  async checkPermissions() {
-    this.checkCameraPermissions();
-    this.checkPhotoLibraryPermissions();
-  }
+  
 
   /** CAPTURE CAMERA-PREVIEW IMAGE */
   //toggle opacity fab to hidden
@@ -466,8 +503,8 @@ export class TabsPage {
 
     const CAPTURE_OPTIONS: CameraPreviewPictureOptions = {
       width: this.platform.width(),
-      height: this.platform.height() + 25,
-      quality: 90
+      height: this.platform.width(),
+      quality: 85
     };
 
     const loader = this.loadingCtrl.create({ content: 'steady....' });
@@ -475,11 +512,13 @@ export class TabsPage {
 
     setTimeout(async () => {
       try {
-        const result = await this.cameraPreview.takePicture(CAPTURE_OPTIONS);
-        const imageData = `data:image/jpeg;base64,${result}`;
-        this.hideCamera();
-        this.previewImage = imageData;
+        const result: string = await this.cameraPreview.takePicture(CAPTURE_OPTIONS);
+        const imageData: string = `data:image/jpeg;base64,${result}`;
+        this.cropPreview(imageData, (croppedImg: string) => {
+          this.previewImage = croppedImg;
+        });
         this.camPrevCmp.isPicTaken = true;
+        this.hideCamera();
         loader.dismiss();
       }
       catch(e) { 
@@ -490,48 +529,42 @@ export class TabsPage {
   }
 
   public deletePreview() {
-    this.alertCtrl.create({
-      title: 'Delete Capture',
-      message: 'Are you sure you want to delete the preview?',
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: () => console.log('dont delete')
-        }, {
-          text: 'Delete',
-          role: 'destructive',
-          handler: () => {
-            this.previewImage = null;
-            this.camPrevCmp.isPicTaken = false;
-            this.showCamera();
-          }
-        }
-      ]
-    }).present();
+    this.previewImage = null;
+    this.camPrevCmp.isPicTaken = false;
+    this.showCamera();
+    this.statusBar.hide();
     
   }
+  
   public async savePreview(imgUrl: string) {
-    try {
-      const savedPreview: LibraryItem = await this.photoLibrary.saveImage(imgUrl, this.selectedProfile.name);
+    const loader = this.loadingCtrl.create({ content: 'saving...' });
+    loader.onDidDismiss(() => {
       this.previewImage = null;
       this.camPrevCmp.isPicTaken = false;
       this.slideToDetails();
-    }
-    catch(e) { this.logger.logError(`error saving to photo library ${e.message}`) }
-  }
-
-  async cameraBack() {
-    /*try {
-      await this.cameraPreview.onBackButton();
-      this.slideToProfiles();
-    }
-    catch(e) { this.logger.logError(`back button error ${e}`) }*/
+      this.tabsNavbarCmp.activeTab = 0;
+    });
+    loader.present();
+    setTimeout(async () => {
+      try {
+        const savedPreview: LibraryItem = await this.photoLibrary.saveImage(imgUrl, this.selectedProfile.name);
+        if (this.selectedProfile.images.length == 0) this.selectedProfile.images = [];
+        this.selectedProfile.images.push(imgUrl);
+        this.profileService.updateProfile(this.selectedProfile);
+        loader.dismiss();
+      }
+      catch(e) { 
+        this.logger.logError(`error saving to photo library ${e.message}`);
+        loader.dismiss();
+      }
+    }, 750);
+    
   }
 
   startCamera() { 
+
     const PREVIEW_DIMENSIONS: CameraPreviewDimensions = {
-      height: this.platform.height() + 25,
+      height: this.platform.width(),
       width: this.platform.width()
     };
 
@@ -540,12 +573,14 @@ export class TabsPage {
       y: 0,
       height: PREVIEW_DIMENSIONS.height,
       width: PREVIEW_DIMENSIONS.width,
-      tapPhoto: false,
+      tapPhoto:false,
+      tapToFocus: true,
       toBack: true,
       previewDrag: false,
       camera: this.cameraPreview.CAMERA_DIRECTION.FRONT,
-      alpha: 1
+      alpha: 1      
     };
+
     this.cameraPreview.startCamera(PREVIEW_OPTIONS);
   }
 
@@ -572,10 +607,8 @@ export class TabsPage {
   }
 
   resizeTabs() {
-    //setTimeout(() => {
       this.content.resize();
       this.tabs.resize();
-   // }, 310);
       this.lockTabs();
   }
 
@@ -605,7 +638,7 @@ export class TabsPage {
         }
         else { this.logger.logError('no camera present on this device') }
       }
-      this.isFlashAvailable = await this.getFlashAvailable();
+      await this.getFlashAvailable();
     }
     catch(e) { this.logger.logError(`diagnostics error ${e}`) }
   }
@@ -614,27 +647,82 @@ export class TabsPage {
     try { 
       await this.photoLibrary.requestAuthorization({ read: true, write: true });
       this.logger.logCompleted(`library access granted`);
+      /*this.photoLibrary.getLibrary().subscribe({
+        next: library => {
+          library.forEach((libraryItem) => {
+            for (let prop in libraryItem) this.logger.logCompleted(`${prop}: ${libraryItem['prop']}`);
+          });
+        },
+        error: err => { this.logger.logError('could not get photos') },
+        complete: () => { this.logger.logCompleted('photo library done') }
+      });*/
     }
     catch(e) { this.logger.logError(`photolibrary authorization error ${e.message}`) }
   }
 
-  async getFlashAvailable(): Promise<boolean> {
+  async checkNotificationPermissions() {
     try {
-      const flashModes = await this.cameraPreview.getSupportedFlashModes();
-      let flashList: string  = '';
-      if (flashModes.length) {
-        flashModes.forEach(flash => {
-          flashList += `${flash}, `;
-        });
-        this.logger.logCompleted(`flash avalaible: ${flashList}`);
+      const permission: boolean = await this.notifications.hasPermission();
+      if (permission) {
+        this.logger.logCompleted('Notification permission');
+        const scheduledList = await this.notifications.getAllScheduled();
+        scheduledList.forEach(notification => console.log(notification));
       }
-      else this.logger.logError('no flash available');
-      return flashModes.length > 1;
+      else {
+        const request: boolean = await this.notifications.requestPermission();
+        if (request) {
+          this.logger.logCompleted('Notification permission');
+          //const scheduledList = await this.notifications.getAllScheduled();
+          //scheduledList.forEach(notification => console.log(notification));
+        }
+        else this.logger.logError('No notification permission');
+      }
     }
-    catch(e) { this.logger.logError(`flash error ${e}`) }
+    catch(e) { this.logger.logError(`notification permission error ${e}`) }
   }
 
-  get isNative(): boolean {
-    return (this.platform.is('cordova') || this.platform.is('android') || this.platform.is('ios'));
+  async getFlashAvailable() {
+    try {
+      const flashModes = await this.cameraPreview.getSupportedFlashModes();
+      this.logger.logCompleted(`flash available: ${flashModes.length > 0}`);
+      if (flashModes.length > 0) {
+        let flashMode: string = this.camPrevCmp.isFlashOn ? 'on' : 'off';
+        this.cameraPreview.setFlashMode(flashMode);
+        this.isFlashAvailable = true;
+      }
+    }
+    catch(e) { 
+      this.logger.logError(`flash error ${e}`);
+      this.isFlashAvailable = false;
+    }
+  }
+
+  get isNative(): boolean { return (this.platform.is('cordova') || this.platform.is('android') || this.platform.is('ios')) }
+
+  private cropPreview(imgPath: string, callback) {
+    
+    let canvas: HTMLCanvasElement = document.createElement('canvas');
+    let image = new Image();
+    
+    image.onload = () => {
+      const width: number = image.width;
+      const height: number = image.height;
+      canvas.width = width;
+      canvas.height = width;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(image,            //source img
+                    0,                //source x coords
+                    (height - width) / 2,       //source y coords
+                    width,            //source width 
+                    width,            //sourceHeight
+                    0,                //cropped x coords
+                    0,                //cropped y coords
+                    width,            //cropped width 
+                    width);           //cropped height
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+      callback(dataUrl);
+    }
+    //this line will call the previous function
+    image.src = imgPath;
   }
 }
